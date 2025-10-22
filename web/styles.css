@@ -440,13 +440,13 @@ label {
     background: rgba(0, 0, 0, 0.8);
     z-index: 1000;
     animation: fadeIn 0.3s ease;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
 }
 
 .modal.active {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
 }
 
 .modal-content {

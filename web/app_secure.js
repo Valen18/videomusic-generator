@@ -146,6 +146,14 @@ function handleWebSocketMessage(data) {
             if (data.message.includes('¡Imagen generada!') || data.message.includes('Imagen guardada:')) {
                 loadCurrentSessionPreview();
             }
+            // Check for loop completion
+            if (data.message.includes('Loop creado exitosamente') || data.message.includes('actualizado exitosamente')) {
+                setTimeout(() => {
+                    hideProgress();
+                    showToast('✅ Loop actualizado con subtítulos personalizados', 'success');
+                    refreshHistory();
+                }, 1000);
+            }
             break;
         case 'complete':
             handleGenerationComplete(data.data);
@@ -431,9 +439,9 @@ function updateProgress(message) {
         progress = 85;
     } else if (msg.includes('descargando video')) {
         progress = 90;
-    } else if (msg.includes('bucle') || msg.includes('subtítulos') || msg.includes('karaoke')) {
+    } else if (msg.includes('bucle') || msg.includes('loop') || msg.includes('subtítulos') || msg.includes('karaoke')) {
         progress = 95;
-    } else if (msg.includes('completada') || msg.includes('exitosamente') || msg.includes('creado')) {
+    } else if (msg.includes('completada') || msg.includes('exitosamente') || msg.includes('creado') || msg.includes('actualizado')) {
         progress = 100;
     } else if (msg.includes('error')) {
         progress = 0;
@@ -701,7 +709,7 @@ function loopVideoForSession(sessionId) {
 
 function openSubtitleConfig() {
     const modal = document.getElementById('subtitleConfigModal');
-    modal.style.display = 'block';
+    modal.classList.add('active');
 
     // Update value displays when sliders change
     document.getElementById('subtitleFontSize').oninput = function() {
@@ -723,7 +731,7 @@ function openSubtitleConfig() {
 
 function closeSubtitleConfig() {
     const modal = document.getElementById('subtitleConfigModal');
-    modal.style.display = 'none';
+    modal.classList.remove('active');
     currentLoopSessionId = null;
 }
 
