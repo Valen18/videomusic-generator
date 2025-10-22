@@ -8,14 +8,18 @@ LABEL maintainer="VideoMusic Generator"
 LABEL description="AI-powered music video generator with Suno, Replicate, and OpenAI"
 LABEL version="1.0.0"
 
-# Install system dependencies including FFmpeg
+# Install system dependencies including FFmpeg and ImageMagick
 RUN apt-get update && apt-get install -y \
     ffmpeg \
+    imagemagick \
     libsm6 \
     libxext6 \
     libxrender-dev \
     curl \
     && rm -rf /var/lib/apt/lists/*
+
+# Configure ImageMagick policy to allow video processing
+RUN sed -i 's/rights="none" pattern="PDF"/rights="read|write" pattern="PDF"/' /etc/ImageMagick-6/policy.xml || true
 
 # Set working directory
 WORKDIR /app
