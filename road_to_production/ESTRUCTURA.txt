@@ -1,0 +1,149 @@
+═══════════════════════════════════════════════════════════════════
+  VIDEOMUSIC GENERATOR - ESTRUCTURA DE DESPLIEGUE
+═══════════════════════════════════════════════════════════════════
+
+road_to_production/
+│
+├── 📄 README.md                   ← LEE ESTO PRIMERO
+│   └─ Guía rápida y estructura completa
+│
+├── 📘 deployment-guide.md         ← Guía completa de despliegue
+│   └─ Instrucciones detalladas paso a paso
+│
+├── 🐳 Dockerfile                  ← Imagen Docker optimizada
+│   ├─ Python 3.11 slim
+│   ├─ FFmpeg incluido
+│   ├─ Usuario no-root (seguridad)
+│   └─ Health checks automáticos
+│
+├── 🐙 docker-compose.yml          ← Orquestación completa
+│   ├─ Configuración de servicios
+│   ├─ Volúmenes persistentes
+│   ├─ Variables de entorno
+│   └─ Networking
+│
+├── 🚫 .dockerignore               ← Optimiza build
+│   └─ Excluye archivos innecesarios
+│
+├── ⚙️  .env.template               ← Plantilla de configuración
+│   ├─ API Keys
+│   ├─ Docker Hub username
+│   └─ Configuración de seguridad
+│
+├── 🔨 SCRIPTS DE BUILD:
+│   │
+│   ├── build.sh                   ← Linux/Mac
+│   ├── build.bat                  ← Windows
+│   │   └─ Construye imagen Docker localmente
+│   │
+│   ├── push.sh                    ← Linux/Mac
+│   └── push.bat                   ← Windows
+│       └─ Sube imagen a Docker Hub
+│
+└── 📋 ESTRUCTURA.txt              ← Este archivo
+
+═══════════════════════════════════════════════════════════════════
+  FLUJO DE TRABAJO
+═══════════════════════════════════════════════════════════════════
+
+MÁQUINA LOCAL:
+┌─────────────────────────────────────────────────────────────────┐
+│ 1. cd road_to_production                                         │
+│ 2. ./build.sh         (Construir imagen)                         │
+│ 3. ./push.sh          (Subir a Docker Hub)                       │
+└─────────────────────────────────────────────────────────────────┘
+                            │
+                            │ Docker Hub
+                            ▼
+SERVIDOR UBUNTU:
+┌─────────────────────────────────────────────────────────────────┐
+│ 1. Crear .env (copiar desde .env.template)                      │
+│ 2. docker-compose up -d                                          │
+│ 3. Acceder a http://TU_IP:8000                                   │
+└─────────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════
+  ARCHIVOS NECESARIOS EN SERVIDOR
+═══════════════════════════════════════════════════════════════════
+
+Sólo necesitas en el servidor:
+✓ docker-compose.yml
+✓ .env (configurado con tus API keys)
+
+Todo lo demás está en la imagen Docker.
+
+═══════════════════════════════════════════════════════════════════
+  CARACTERÍSTICAS DE LA IMAGEN
+═══════════════════════════════════════════════════════════════════
+
+✅ Tamaño optimizado (~800MB)
+✅ FFmpeg incluido para procesamiento de video
+✅ Python 3.11 con todas las dependencias
+✅ Usuario no-root (seguridad)
+✅ Health checks automáticos
+✅ Logs estructurados
+✅ Volúmenes persistentes para datos
+✅ Auto-restart si falla
+✅ Compatible con Dokploy, Portainer, etc.
+
+═══════════════════════════════════════════════════════════════════
+  COMANDOS RÁPIDOS
+═══════════════════════════════════════════════════════════════════
+
+BUILD & PUSH (local):
+  Windows:   build.bat && push.bat
+  Linux/Mac: ./build.sh && ./push.sh
+
+DESPLEGAR (servidor):
+  docker-compose up -d
+
+VER LOGS:
+  docker-compose logs -f
+
+REINICIAR:
+  docker-compose restart
+
+ACTUALIZAR:
+  docker-compose pull && docker-compose up -d
+
+PARAR:
+  docker-compose down
+
+HEALTH CHECK:
+  curl http://localhost:8000/health
+
+═══════════════════════════════════════════════════════════════════
+  VARIABLES DE ENTORNO OBLIGATORIAS
+═══════════════════════════════════════════════════════════════════
+
+SUNO_API_KEY           → API de Suno (música)
+SESSION_SECRET_KEY     → Clave secreta (generar nueva!)
+DOCKER_USERNAME        → Tu usuario de Docker Hub
+
+Generar SESSION_SECRET_KEY:
+  python3 -c "import secrets; print(secrets.token_urlsafe(32))"
+
+═══════════════════════════════════════════════════════════════════
+  PUERTOS
+═══════════════════════════════════════════════════════════════════
+
+8000   → Aplicación web (configurable con HOST_PORT en .env)
+
+═══════════════════════════════════════════════════════════════════
+  VOLÚMENES PERSISTENTES
+═══════════════════════════════════════════════════════════════════
+
+videomusic-data     → Base de datos y sesiones de usuario
+videomusic-output   → Audio, imágenes y videos generados
+
+Los datos persisten incluso si el contenedor se elimina.
+
+═══════════════════════════════════════════════════════════════════
+  SOPORTE
+═══════════════════════════════════════════════════════════════════
+
+📖 README.md               → Guía rápida
+📘 deployment-guide.md     → Guía completa
+🐛 docker logs             → Ver errores
+
+═══════════════════════════════════════════════════════════════════

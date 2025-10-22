@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  videomusic-generator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: videomusic-generator
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      # Persist user data and generated content
+      - ./data:/app/data
+      - ./output:/app/output
+    environment:
+      # Application settings
+      - HOST=0.0.0.0
+      - PORT=8000
+      - LOG_LEVEL=info
+
+      # API Keys (set these in Dokploy environment variables)
+      - SUNO_API_KEY=${SUNO_API_KEY}
+      - SUNO_BASE_URL=${SUNO_BASE_URL:-https://api.sunoapi.org}
+      - REPLICATE_API_TOKEN=${REPLICATE_API_TOKEN}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_ASSISTANT_ID=${OPENAI_ASSISTANT_ID:-asst_tR6OL8QLpSsDDlc6hKdBmVNU}
+
+      # Security settings
+      - SESSION_SECRET_KEY=${SESSION_SECRET_KEY:-change-this-secret-key-in-production}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - videomusic-network
+
+networks:
+  videomusic-network:
+    driver: bridge
+
+volumes:
+  data:
+  output:

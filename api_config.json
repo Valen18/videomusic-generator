@@ -1,0 +1,9 @@
+{
+  "suno_api_key": "password",
+  "suno_base_url": "https://api.sunoapi.org",
+  "replicate_api_token": "r8_TlGTFBBsFkqhh8x8Kyk1vsDNVxY78Ha3GYih8",
+  "replicate_base_url": "https://api.replicate.com/v1",
+  "openai_api_key": "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",
+  "openai_assistant_id": "asst_tR6OL8QLpSsDDlc6hKdBmVNU",
+  "openai_base_url": "https://api.openai.com/v1"
+}

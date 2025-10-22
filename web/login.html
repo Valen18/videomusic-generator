@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - VideoMusic Generator</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 40px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-logo {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .login-title {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .login-subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .form-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .form-tab {
+            flex: 1;
+            padding: 12px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .form-tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .form-content {
+            display: none;
+        }
+
+        .form-content.active {
+            display: block;
+        }
+
+        .form-footer {
+            margin-top: 20px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--error-color);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .success-message {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success-color);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo">🎵</div>
+                <h1 class="login-title">VideoMusic Generator</h1>
+                <p class="login-subtitle">Genera música con IA</p>
+            </div>
+
+            <div class="form-tabs">
+                <button class="form-tab active" onclick="switchForm('login')">Iniciar Sesión</button>
+                <button class="form-tab" onclick="switchForm('register')">Registrarse</button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="loginForm" class="form-content active">
+                <div id="loginError" class="error-message" style="display: none;"></div>
+
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="loginUsername">Usuario</label>
+                        <input
+                            type="text"
+                            id="loginUsername"
+                            class="input-field"
+                            placeholder="Ingresa tu usuario"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="loginPassword">Contraseña</label>
+                        <input
+                            type="password"
+                            id="loginPassword"
+                            class="input-field"
+                            placeholder="Ingresa tu contraseña"
+                            required
+                        >
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-large" style="width: 100%;" id="loginBtn">
+                        Iniciar Sesión
+                    </button>
+                </form>
+
+                <div class="form-footer">
+                    <p>Credenciales por defecto: <strong>admin / admin123</strong></p>
+                    <p style="color: var(--warning-color); margin-top: 5px;">⚠️ Cambia la contraseña después de iniciar sesión</p>
+                </div>
+            </div>
+
+            <!-- Register Form -->
+            <div id="registerForm" class="form-content">
+                <div id="registerError" class="error-message" style="display: none;"></div>
+                <div id="registerSuccess" class="success-message" style="display: none;"></div>
+
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label for="registerUsername">Usuario</label>
+                        <input
+                            type="text"
+                            id="registerUsername"
+                            class="input-field"
+                            placeholder="Elige un nombre de usuario"
+                            required
+                            minlength="3"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="registerEmail">Email</label>
+                        <input
+                            type="email"
+                            id="registerEmail"
+                            class="input-field"
+                            placeholder="tu@email.com"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="registerPassword">Contraseña</label>
+                        <input
+                            type="password"
+                            id="registerPassword"
+                            class="input-field"
+                            placeholder="Mínimo 6 caracteres"
+                            required
+                            minlength="6"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="registerPasswordConfirm">Confirmar Contraseña</label>
+                        <input
+                            type="password"
+                            id="registerPasswordConfirm"
+                            class="input-field"
+                            placeholder="Repite tu contraseña"
+                            required
+                            minlength="6"
+                        >
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-large" style="width: 100%;" id="registerBtn">
+                        Crear Cuenta
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchForm(formType) {
+            // Update tabs
+            document.querySelectorAll('.form-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update forms
+            document.querySelectorAll('.form-content').forEach(form => {
+                form.classList.remove('active');
+            });
+            document.getElementById(formType + 'Form').classList.add('active');
+
+            // Clear messages
+            hideError('loginError');
+            hideError('registerError');
+            hideError('registerSuccess');
+        }
+
+        function showError(elementId, message) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.style.display = 'block';
+        }
+
+        function hideError(elementId) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'none';
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            hideError('loginError');
+
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            const btn = document.getElementById('loginBtn');
+
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Iniciando sesión...';
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Error al iniciar sesión');
+                }
+
+                // Redirect to main app
+                window.location.href = '/';
+
+            } catch (error) {
+                showError('loginError', error.message);
+                btn.disabled = false;
+                btn.innerHTML = 'Iniciar Sesión';
+            }
+        }
+
+        async function handleRegister(event) {
+            event.preventDefault();
+            hideError('registerError');
+            hideError('registerSuccess');
+
+            const username = document.getElementById('registerUsername').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
+            const btn = document.getElementById('registerBtn');
+
+            // Validate passwords match
+            if (password !== passwordConfirm) {
+                showError('registerError', 'Las contraseñas no coinciden');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Creando cuenta...';
+
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Error al crear la cuenta');
+                }
+
+                // Show success message
+                const successEl = document.getElementById('registerSuccess');
+                successEl.textContent = '✅ Cuenta creada exitosamente. Ahora puedes iniciar sesión.';
+                successEl.style.display = 'block';
+
+                // Clear form
+                document.getElementById('registerUsername').value = '';
+                document.getElementById('registerEmail').value = '';
+                document.getElementById('registerPassword').value = '';
+                document.getElementById('registerPasswordConfirm').value = '';
+
+                // Switch to login tab after 2 seconds
+                setTimeout(() => {
+                    const loginTab = document.querySelector('.form-tab');
+                    loginTab.click();
+                }, 2000);
+
+            } catch (error) {
+                showError('registerError', error.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Crear Cuenta';
+            }
+        }
+    </script>
+</body>
+</html>

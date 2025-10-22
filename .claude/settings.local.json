@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip uninstall:*)",
+      "Bash(findstr:*)",
+      "Bash(pyinstaller:*)",
+      "Bash(tasklist)",
+      "Bash(awk:*)",
+      "Bash(dir:*)",
+      "Bash(rd:*)",
+      "Bash(powershell:*)",
+      "Bash(python:*)",
+      "Bash(netstat:*)",
+      "Bash(curl:*)",
+      "Bash(pip install:*)",
+      "Bash(timeout:*)",
+      "Bash(taskkill:*)",
+      "Bash(start cmd /k:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

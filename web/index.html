@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VideoMusic Generator 🎵</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        /* Custom Tailwind config */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Session card grid with fixed aspect ratio */
+        .session-card-wrapper {
+            display: flex;
+            flex-direction: column;
+            background: #1e293b;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .session-card-wrapper:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Fixed cover image container - 16:9 aspect ratio */
+        .cover-container {
+            width: 100%;
+            aspect-ratio: 16/9;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .cover-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Session content with proper padding */
+        .session-content {
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        /* Audio player compact */
+        .audio-compact {
+            width: 100%;
+            height: 32px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <h1 class="logo">🎵 VideoMusic Generator</h1>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="openSettings()">
+                        ⚙️ Configuración
+                    </button>
+                    <button class="btn btn-secondary" onclick="validateAPIs()">
+                        🔍 Validar Conectividad
+                    </button>
+                    <div class="status-indicator" id="statusIndicator">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Cargando...</span>
+                    </div>
+                    <div id="userDisplay"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="generate" onclick="switchTab('generate')">
+                    ✨ Generar Canción
+                </button>
+                <button class="tab-btn" data-tab="history" onclick="switchTab('history')">
+                    🎵 Historial
+                </button>
+            </div>
+
+            <!-- Generate Tab -->
+            <div id="generateTab" class="tab-content active">
+                <!-- AI Generation Section -->
+                <section class="card">
+                    <h2 class="card-title">🤖 Generación con IA</h2>
+                    <div class="form-group">
+                        <label for="descriptionInput">Descripción para generar letra:</label>
+                        <div class="input-with-button">
+                            <input
+                                type="text"
+                                id="descriptionInput"
+                                class="input-field"
+                                placeholder="Ej: Canción alegre sobre un perro que va a la playa"
+                            >
+                            <button class="btn btn-primary" onclick="generateLyrics()" id="generateLyricsBtn">
+                                ✨ Generar Letra con IA
+                            </button>
+                        </div>
+                        <p class="help-text" id="openaiStatus">OpenAI no configurado</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lyricsInput">Letra generada:</label>
+                        <textarea
+                            id="lyricsInput"
+                            class="textarea-field"
+                            rows="8"
+                            placeholder="La letra generada aparecerá aquí, o puedes escribir tu propia letra..."
+                        ></textarea>
+                    </div>
+                </section>
+
+                <!-- Configuration Section -->
+                <section class="card">
+                    <h2 class="card-title">⚙️ Configuración de la Canción</h2>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="titleInput">Título:</label>
+                            <input
+                                type="text"
+                                id="titleInput"
+                                class="input-field"
+                                placeholder="Título de la canción"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="styleInput">Estilo musical:</label>
+                            <select id="styleInput" class="select-field">
+                                <option value="">Selecciona un estilo...</option>
+                                <option value="children's song, playful, educational">Children's Song (Juguetona, Educativa)</option>
+                                <option value="nursery rhyme, gentle, soothing">Nursery Rhyme (Suave, Relajante)</option>
+                                <option value="kids pop, upbeat, fun">Kids Pop (Animada, Divertida)</option>
+                                <option value="disney-style, magical, orchestral">Disney Style (Mágica, Orquestal)</option>
+                                <option value="lullaby, soft, calming">Lullaby (Suave, Calmante)</option>
+                                <option value="animated musical, cheerful, energetic">Animated Musical (Alegre, Energética)</option>
+                                <option value="children's folk, acoustic, simple">Children's Folk (Acústica, Simple)</option>
+                                <option value="kids rock, energetic, catchy">Kids Rock (Energética, Pegajosa)</option>
+                                <option value="preschool song, repetitive, easy to sing">Preschool Song (Repetitiva, Fácil)</option>
+                                <option value="cartoon theme, bouncy, memorable">Cartoon Theme (Saltarina, Memorable)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="modelInput">Modelo:</label>
+                            <select id="modelInput" class="select-field">
+                                <option value="V4_5" selected>V4.5 (Recomendado)</option>
+                                <option value="V4">V4</option>
+                                <option value="V3_5">V3.5</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="customModeInput" checked>
+                                Modo personalizado
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="instrumentalInput">
+                                Instrumental
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="generateImageInput" checked>
+                            Generar imagen de portada (16:9)
+                        </label>
+                        <p class="help-text" id="replicateStatus">Replicate no configurado</p>
+                    </div>
+                </section>
+
+                <!-- Action Buttons -->
+                <section class="card">
+                    <div class="button-group">
+                        <button class="btn btn-primary btn-large" onclick="generateSong()" id="generateSongBtn">
+                            🎵 Generar Canción
+                        </button>
+                        <button class="btn btn-secondary" onclick="clearForm()">
+                            🗑️ Limpiar
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Progress Section -->
+                <section class="card" id="progressSection" style="display: none;">
+                    <h3 class="card-title">📊 Progreso</h3>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <p class="progress-text" id="progressText">Iniciando...</p>
+                    </div>
+                </section>
+
+                <!-- Preview Section -->
+                <section class="card" id="previewSection" style="display: none;">
+                    <h3 class="card-title">✨ Vista Previa</h3>
+                    <div id="previewContent" class="preview-content">
+                        <!-- Image preview -->
+                        <div id="imagePreview" class="preview-item" style="display: none;">
+                            <h4>🖼️ Imagen de Portada</h4>
+                            <img id="previewImage" src="" alt="Imagen de portada" class="preview-image">
+                        </div>
+
+                        <!-- Audio preview -->
+                        <div id="audioPreview" class="preview-item" style="display: none;">
+                            <h4>🎵 Audio Generado</h4>
+                            <div id="audioPlayers"></div>
+                        </div>
+
+                        <!-- Video preview -->
+                        <div id="videoPreview" class="preview-item" style="display: none;">
+                            <h4>🎬 Video Generado</h4>
+                            <video id="previewVideo" controls class="preview-video">
+                                Tu navegador no soporta el elemento de video.
+                            </video>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- History Tab -->
+            <div id="historyTab" class="tab-content">
+                <section class="card">
+                    <div class="history-header">
+                        <h2 class="card-title">🎵 Historial de Generaciones</h2>
+                        <button class="btn btn-secondary" onclick="refreshHistory()">
+                            🔄 Actualizar
+                        </button>
+                    </div>
+
+                    <div class="search-bar">
+                        <input
+                            type="text"
+                            id="searchInput"
+                            class="input-field"
+                            placeholder="🔍 Buscar por título..."
+                            onkeyup="filterSessions()"
+                        >
+                    </div>
+
+                    <div id="sessionsList" class="sessions-list">
+                        <p class="empty-state">Cargando sesiones...</p>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>⚙️ Configuración de API Keys</h2>
+                <button class="modal-close" onclick="closeSettings()">✕</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="sunoApiKeyInput">Suno API Key:</label>
+                    <input
+                        type="password"
+                        id="sunoApiKeyInput"
+                        class="input-field"
+                        placeholder="sk-..."
+                    >
+                    <p class="help-text">Requerido para generar música</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="sunoBaseUrlInput">Suno Base URL:</label>
+                    <input
+                        type="text"
+                        id="sunoBaseUrlInput"
+                        class="input-field"
+                        value="https://api.sunoapi.org"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="replicateApiTokenInput">Replicate API Token:</label>
+                    <input
+                        type="password"
+                        id="replicateApiTokenInput"
+                        class="input-field"
+                        placeholder="r8_..."
+                    >
+                    <p class="help-text">Opcional: Para generar imágenes y videos</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="openaiApiKeyInput">OpenAI API Key:</label>
+                    <input
+                        type="password"
+                        id="openaiApiKeyInput"
+                        class="input-field"
+                        placeholder="sk-..."
+                    >
+                    <p class="help-text">Opcional: Para generar letras con IA</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="openaiAssistantIdInput">OpenAI Assistant ID:</label>
+                    <input
+                        type="text"
+                        id="openaiAssistantIdInput"
+                        class="input-field"
+                        value="asst_tR6OL8QLpSsDDlc6hKdBmVNU"
+                    >
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeSettings()">Cancelar</button>
+                <button class="btn btn-primary" onclick="saveSettings()">💾 Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Session Detail Modal -->
+    <div id="sessionModal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 id="sessionModalTitle">Detalles de la Sesión</h2>
+                <button class="modal-close" onclick="closeSessionModal()">✕</button>
+            </div>
+
+            <div class="modal-body" id="sessionModalBody">
+                <!-- Content loaded dynamically -->
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeSessionModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app_secure.js"></script>
+</body>
+</html>

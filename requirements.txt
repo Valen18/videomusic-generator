@@ -1,0 +1,24 @@
+# Core dependencies
+requests>=2.31.0
+python-dotenv>=1.0.0
+aiohttp>=3.8.0
+
+# Web application dependencies
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+websockets>=12.0
+pydantic>=2.0.0
+python-multipart>=0.0.6
+
+# AI/ML API clients
+openai>=1.3.0
+replicate>=0.15.0
+
+# GUI and media dependencies (optional for desktop app)
+Pillow>=9.0.0
+pygame>=2.1.0
+matplotlib>=3.5.0
+
+# Optional for development
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
