@@ -32,8 +32,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1.5'  # Máximo 1.5 CPUs
-          memory: 1G   # Máximo 1GB de RAM
+          cpus: '2.0'  # Máximo 2 CPUs (aumentado)
+          memory: 2G   # Máximo 2GB de RAM (aumentado)
         reservations:
           cpus: '0.5'  # Mínimo 0.5 CPUs reservados
           memory: 512M # Mínimo 512MB reservados
