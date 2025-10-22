@@ -381,13 +381,80 @@ function showProgress(message) {
 
     progressSection.style.display = 'block';
     progressText.textContent = message;
-    progressFill.style.width = '100%';
+
+    // Reset progress bar to 0%
+    progressFill.style.width = '0%';
+    progressFill.style.background = 'linear-gradient(90deg, #667eea, #764ba2)';
+    progressFill.style.transition = 'width 0.5s ease';
+
+    // Animate to 5% to show it started
+    setTimeout(() => {
+        progressFill.style.width = '5%';
+    }, 100);
 }
 
 function updateProgress(message) {
     const progressText = document.getElementById('progressText');
+    const progressFill = document.getElementById('progressFill');
+    const progressSection = document.getElementById('progressSection');
+
     progressText.textContent = message;
     console.log('📊 Progreso:', message);
+
+    // Show progress section
+    progressSection.style.display = 'block';
+
+    // Calculate progress percentage based on message keywords
+    let progress = 0;
+    const msg = message.toLowerCase();
+
+    // Determine progress based on keywords
+    if (msg.includes('iniciando') || msg.includes('creando sesión')) {
+        progress = 5;
+    } else if (msg.includes('enviando') || msg.includes('petición')) {
+        progress = 15;
+    } else if (msg.includes('esperando') && msg.includes('música')) {
+        progress = 25;
+    } else if (msg.includes('estado música')) {
+        progress = 35;
+    } else if (msg.includes('descargando') && msg.includes('audio')) {
+        progress = 50;
+    } else if (msg.includes('generando imagen') || msg.includes('enviando imagen')) {
+        progress = 60;
+    } else if (msg.includes('esperando') && msg.includes('imagen')) {
+        progress = 70;
+    } else if (msg.includes('descargando imagen')) {
+        progress = 75;
+    } else if (msg.includes('creando video') || msg.includes('enviando') && msg.includes('video')) {
+        progress = 80;
+    } else if (msg.includes('esperando') && msg.includes('video')) {
+        progress = 85;
+    } else if (msg.includes('descargando video')) {
+        progress = 90;
+    } else if (msg.includes('bucle') || msg.includes('subtítulos') || msg.includes('karaoke')) {
+        progress = 95;
+    } else if (msg.includes('completada') || msg.includes('exitosamente') || msg.includes('creado')) {
+        progress = 100;
+    } else if (msg.includes('error')) {
+        progress = 0;
+    } else {
+        // Gradual progress for unknown steps
+        const currentProgress = parseInt(progressFill.style.width) || 0;
+        progress = Math.min(currentProgress + 5, 98);
+    }
+
+    // Animate progress bar
+    progressFill.style.width = progress + '%';
+    progressFill.style.transition = 'width 0.5s ease';
+
+    // Change color based on state
+    if (msg.includes('error')) {
+        progressFill.style.background = 'linear-gradient(90deg, #ef4444, #dc2626)';
+    } else if (progress === 100) {
+        progressFill.style.background = 'linear-gradient(90deg, #10b981, #059669)';
+    } else {
+        progressFill.style.background = 'linear-gradient(90deg, #667eea, #764ba2)';
+    }
 
     // Also show a toast for important updates
     if (message.includes('completada') || message.includes('Error') || message.includes('Descargando')) {
@@ -617,6 +684,7 @@ function generateVideoForSession(sessionId) {
             session_id: sessionId
         }));
 
+        showProgress('🎬 Iniciando generación de video animado...');
         showToast('🎬 Generando video...', 'success');
     } else {
         showToast('Error: No hay conexión con el servidor', 'error');
@@ -631,6 +699,7 @@ function loopVideoForSession(sessionId) {
             session_id: sessionId
         }));
 
+        showProgress('🔄 Iniciando creación de loop con subtítulos...');
         showToast('🔄 Recreando bucle de video...', 'success');
     } else {
         showToast('Error: No hay conexión con el servidor', 'error');
