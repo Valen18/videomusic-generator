@@ -16,9 +16,10 @@ class MoviePyKaraokeGenerator:
     """
 
     def __init__(self):
-        self.video_width = 1280
-        self.video_height = 720
-        self.subtitle_zone_height = 100
+        # Reducir resolución para menor consumo de recursos
+        self.video_width = 854  # 480p en lugar de 720p
+        self.video_height = 480
+        self.subtitle_zone_height = 70
 
     def create_karaoke_video(self, video_path: str, output_path: str, lyrics: str,
                              audio_path: str = None, duration: float = 0) -> bool:
@@ -83,13 +84,15 @@ class MoviePyKaraokeGenerator:
                 final_video = video
 
             # Exportar video SIN audio primero
-            print("Renderizando video con subtítulos (sin audio temporalmente)...")
+            # OPTIMIZADO para bajo consumo de recursos
+            print("Renderizando video con subtítulos (optimizado para bajo consumo)...")
             final_video.write_videofile(
                 temp_video,
                 codec='libx264',
-                fps=24,
-                preset='faster',
-                threads=8,
+                fps=15,  # Reducido de 24 a 15 FPS (37% menos frames)
+                preset='ultrafast',  # Preset más rápido con menor CPU
+                threads=2,  # Limitado a 2 threads para no sobrecargar
+                bitrate='500k',  # Bitrate bajo para archivos más pequeños
                 logger=None,
                 audio=False  # NO incluir audio aquí
             )
