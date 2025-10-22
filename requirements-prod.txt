@@ -19,6 +19,7 @@ replicate>=0.15.0
 
 # Media processing
 Pillow>=10.0.0
+numpy>=1.24.0
 
 # Note: pygame and matplotlib are NOT included in production
 # as they are only needed for the desktop GUI application
