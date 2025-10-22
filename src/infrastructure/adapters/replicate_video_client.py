@@ -278,12 +278,13 @@ class ReplicateVideoClient(VideoGeneratorPort):
             return None
     
     def loop_video_with_subtitles(
-        self, 
-        input_path: str, 
-        output_path: str, 
-        target_duration: int, 
+        self,
+        input_path: str,
+        output_path: str,
+        target_duration: int,
         lyrics: str,
-        audio_path: str = None
+        audio_path: str = None,
+        subtitle_config: dict = None
     ) -> bool:
         """
         Crea un bucle del video con subtítulos animados tipo karaoke
@@ -298,13 +299,14 @@ class ReplicateVideoClient(VideoGeneratorPort):
             
             print("Añadiendo subtítulos animados...")
             
-            # Luego añadir subtítulos al bucle
+            # Luego añadir subtítulos al bucle con configuración personalizada
             subtitle_success = self.subtitle_animator.add_subtitles_to_video(
                 temp_looped_path,
                 output_path,
                 lyrics,
                 target_duration,
-                audio_path
+                audio_path,
+                subtitle_config
             )
             
             # Limpiar archivo temporal

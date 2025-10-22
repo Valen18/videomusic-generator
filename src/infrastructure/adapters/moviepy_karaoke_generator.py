@@ -22,12 +22,16 @@ class MoviePyKaraokeGenerator:
         self.subtitle_zone_height = 70
 
     def create_karaoke_video(self, video_path: str, output_path: str, lyrics: str,
-                             audio_path: str = None, duration: float = 0) -> bool:
+                             audio_path: str = None, duration: float = 0, subtitle_config: dict = None) -> bool:
         """
-        Crea un video con subtítulos karaoke animados y bailarines
+        Crea un video con subtítulos karaoke animados y bailarines con configuración personalizada
         Estrategia: Crear video sin audio con MoviePy, luego añadir audio con FFmpeg
         """
         try:
+            # Aplicar configuración personalizada si se proporciona
+            if subtitle_config:
+                self._apply_config(subtitle_config)
+
             print("🎵 Iniciando generación de karaoke con MoviePy...")
 
             # Cargar video base
@@ -493,3 +497,27 @@ class MoviePyKaraokeGenerator:
         except Exception as e:
             print(f"Error en fallback: {str(e)}")
             return False
+
+    def _apply_config(self, config: dict):
+        """
+        Aplica la configuración personalizada de subtítulos
+        """
+        # NO aplicar cambios de resolución basados en config
+        # Mantener 480p para estabilidad del servidor
+
+        # Valores por defecto seguros
+        self.font_size = config.get('fontSize', 36)
+        self.font_color = config.get('fontColor', '#ffffff')
+        self.outline_color = config.get('outlineColor', '#000000')
+        self.outline_width = config.get('outlineWidth', 2)
+        self.animation_style = config.get('animation', 'karaoke')
+        self.subtitle_position = config.get('position', 'bottom')
+        self.enable_sync = config.get('enableSyncAdjustment', True)
+
+        print(f"📝 Configuración de subtítulos aplicada:")
+        print(f"  - Tamaño: {self.font_size}px")
+        print(f"  - Color: {self.font_color}")
+        print(f"  - Borde: {self.outline_color} ({self.outline_width}px)")
+        print(f"  - Animación: {self.animation_style}")
+        print(f"  - Posición: {self.subtitle_position}")
+        print(f"  - Sincronización mejorada: {self.enable_sync}")

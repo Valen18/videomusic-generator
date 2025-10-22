@@ -19,7 +19,8 @@ class LoopVideoUseCase:
     async def execute(
         self,
         session: GenerationSession,
-        progress_callback: Optional[Callable[[str], None]] = None
+        progress_callback: Optional[Callable[[str], None]] = None,
+        subtitle_config: dict = None
     ) -> GenerationSession:
         """
         Crea un bucle del video original para que coincida con la duración de la canción
@@ -65,7 +66,8 @@ class LoopVideoUseCase:
                         looped_video_path,
                         target_duration,
                         session.request.prompt,
-                        audio_file
+                        audio_file,
+                        subtitle_config
                     )
                 else:
                     # Fallback al método básico

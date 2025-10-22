@@ -788,8 +788,11 @@ async def loop_video_task(client_id: str, user_id: int, data: dict):
         async def progress_callback(message: str):
             await manager.send_progress(client_id, message)
 
+        # Get subtitle configuration from request
+        subtitle_config = data.get("subtitle_config", {})
+
         loop_video_use_case = LoopVideoUseCase(clients["video_client"], clients["file_storage"])
-        updated_session = await loop_video_use_case.execute(session, progress_callback)
+        updated_session = await loop_video_use_case.execute(session, progress_callback, subtitle_config)
 
         await manager.send_complete(client_id, {
             "session_id": updated_session.session_id,

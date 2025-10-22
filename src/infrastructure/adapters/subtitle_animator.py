@@ -19,12 +19,13 @@ class SubtitleAnimator:
         self.outline_width = 2
         
     def add_subtitles_to_video(
-        self, 
-        video_path: str, 
-        output_path: str, 
-        lyrics: str, 
+        self,
+        video_path: str,
+        output_path: str,
+        lyrics: str,
         audio_duration: float,
-        audio_path: str = None
+        audio_path: str = None,
+        subtitle_config: dict = None
     ) -> bool:
         """
         Añade subtítulos animados tipo karaoke al video
@@ -37,8 +38,8 @@ class SubtitleAnimator:
                 return False
             
             # Ya no necesitamos archivo ASS - usar drawtext directamente
-            # Aplicar subtítulos al video usando FFmpeg
-            success = self._apply_subtitles_to_video(video_path, output_path, lyrics, audio_path, audio_duration)
+            # Aplicar subtítulos al video usando FFmpeg con configuración personalizada
+            success = self._apply_subtitles_to_video(video_path, output_path, lyrics, audio_path, audio_duration, subtitle_config)
             
             return success
             
@@ -288,20 +289,20 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         
         return f"{hours}:{minutes:02d}:{secs:02d}.{centiseconds:02d}"
     
-    def _apply_subtitles_to_video(self, video_path: str, output_path: str, lyrics: str, audio_path: str = None, audio_duration: float = 0) -> bool:
+    def _apply_subtitles_to_video(self, video_path: str, output_path: str, lyrics: str, audio_path: str = None, audio_duration: float = 0, subtitle_config: dict = None) -> bool:
         """
         Aplica subtítulos karaoke animados al video usando MoviePy
         """
         try:
             print(f"🎤 Creando subtítulos karaoke animados para video infantil...")
 
-            # Usar MoviePy para crear subtítulos karaoke animados
+            # Usar MoviePy para crear subtítulos karaoke animados con configuración personalizada
             from .moviepy_karaoke_generator import MoviePyKaraokeGenerator
 
             print("🎵 Generando karaoke con subtítulos bailarines...")
             karaoke_generator = MoviePyKaraokeGenerator()
             success = karaoke_generator.create_karaoke_video(
-                video_path, output_path, lyrics, audio_path, audio_duration
+                video_path, output_path, lyrics, audio_path, audio_duration, subtitle_config
             )
 
             if success:
