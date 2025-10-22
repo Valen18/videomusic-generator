@@ -9,7 +9,9 @@ from typing import Optional, Dict, List
 from pathlib import Path
 
 class Database:
-    def __init__(self, db_path: str = "videomusic.db"):
+    def __init__(self, db_path: str = "data/videomusic.db"):
+        # Ensure data directory exists
+        Path(db_path).parent.mkdir(parents=True, exist_ok=True)
         self.db_path = db_path
         self.init_database()
 
