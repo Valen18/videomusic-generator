@@ -1,21 +1,22 @@
 {
   "permissions": {
     "allow": [
-      "Bash(pip uninstall:*)",
-      "Bash(findstr:*)",
-      "Bash(pyinstaller:*)",
-      "Bash(tasklist)",
-      "Bash(awk:*)",
-      "Bash(dir:*)",
-      "Bash(rd:*)",
-      "Bash(powershell:*)",
-      "Bash(python:*)",
-      "Bash(netstat:*)",
-      "Bash(curl:*)",
-      "Bash(pip install:*)",
-      "Bash(timeout:*)",
-      "Bash(taskkill:*)",
-      "Bash(start cmd /k:*)"
+      "Bash(Stop-Process -Force)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(ssh:*)",
+      "Bash(sshpass -p 'MasKil0s' ssh -o StrictHostKeyChecking=no root@158.220.94.179 \"docker images | grep videomusic\")",
+      "Bash(sshpass -p 'MasKil0s' ssh -o StrictHostKeyChecking=no root@158.220.94.179 \"cd ~/videomusic/videomusic-generator/road_to_production && docker-compose ps\")",
+      "Bash(ping:*)",
+      "Read(//c/Users/Valen/.ssh/**)",
+      "Bash(cat:*)",
+      "Bash(chmod:*)",
+      "Bash(sshpass -p 'MasKil0s' ssh -o StrictHostKeyChecking=no root@158.220.94.179 \"cd ~/videomusic/videomusic-generator/road_to_production && bash update.sh\")",
+      "Bash(if [ -f ~/.ssh/id_rsa_videomusic ])",
+      "Bash(then rm ~/.ssh/id_rsa_videomusic ~/.ssh/id_rsa_videomusic.pub)",
+      "Bash(fi)",
+      "Bash(ssh-keygen:*)"
     ],
     "deny": [],
     "ask": []
