@@ -30,6 +30,7 @@ COPY src/ ./src/
 COPY web/ ./web/
 COPY web_app_secure.py .
 COPY database.py .
+COPY api_validator.py .
 
 # Create necessary directories with proper permissions
 RUN mkdir -p /app/output /app/data && \
