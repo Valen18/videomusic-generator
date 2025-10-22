@@ -86,6 +86,17 @@
 
         <!-- Main Content -->
         <main class="main-content">
+            <!-- Global Progress Section - Visible from all tabs -->
+            <section class="card" id="progressSection" style="display: none;">
+                <h3 class="card-title">📊 Progreso</h3>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <p class="progress-text" id="progressText">Iniciando...</p>
+                </div>
+            </section>
+
             <!-- Tabs -->
             <div class="tabs">
                 <button class="tab-btn active" data-tab="generate" onclick="switchTab('generate')">
@@ -201,17 +212,6 @@
                         <button class="btn btn-secondary" onclick="clearForm()">
                             🗑️ Limpiar
                         </button>
-                    </div>
-                </section>
-
-                <!-- Progress Section -->
-                <section class="card" id="progressSection" style="display: none;">
-                    <h3 class="card-title">📊 Progreso</h3>
-                    <div class="progress-container">
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progressFill"></div>
-                        </div>
-                        <p class="progress-text" id="progressText">Iniciando...</p>
                     </div>
                 </section>
 
