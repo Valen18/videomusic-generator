@@ -240,16 +240,16 @@ class MoviePyKaraokeGenerator:
 
             # Crear versión blanca (inactiva) del carácter
             if char.strip():  # No animar espacios vacíos
-                # Letra blanca antes de activarse
+                # Letra con color configurado antes de activarse
                 white_duration = char_activate_time - start_time if char_activate_time > start_time else 0
                 if white_duration > 0.1:  # Solo crear si dura más de 0.1 segundos
                     white_char = self._create_dancing_character(
                         char,
                         char_x,
                         j,
-                        color='white',
-                        stroke_color='black',
-                        fontsize=40,
+                        color=self.font_color,
+                        stroke_color=self.outline_color,
+                        fontsize=self.font_size,
                         duration=white_duration,
                         start_time=start_time,
                         line_index=line_index,
@@ -258,16 +258,16 @@ class MoviePyKaraokeGenerator:
                     if white_char:
                         char_clips.append(white_char)
 
-                # Letra amarilla cuando se activa (efecto karaoke)
+                # Letra con color destacado cuando se activa (efecto karaoke)
                 yellow_duration = duration - (char_activate_time - start_time)
                 if yellow_duration > 0.1:  # Solo crear si dura más de 0.1 segundos
                     yellow_char = self._create_dancing_character(
                         char,
                         char_x,
                         j,
-                        color='yellow',
-                        stroke_color='red',
-                        fontsize=45,
+                        color=self.font_color,  # Usar color configurado
+                        stroke_color=self.outline_color,
+                        fontsize=int(self.font_size * 1.125),  # 12.5% más grande cuando activo
                         duration=yellow_duration,
                         start_time=char_activate_time,
                         line_index=line_index,
@@ -296,7 +296,7 @@ class MoviePyKaraokeGenerator:
                 color=color,
                 font='Arial',
                 stroke_color=stroke_color,
-                stroke_width=2 if not is_active else 3,
+                stroke_width=self.outline_width if not is_active else self.outline_width + 1,
                 method='label',
                 kerning=0  # Desactivar kerning para mejor rendimiento
             )
