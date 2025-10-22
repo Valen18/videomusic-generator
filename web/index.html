@@ -358,6 +358,79 @@
         </div>
     </div>
 
+    <!-- Subtitle Configuration Modal -->
+    <div id="subtitleConfigModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🎨 Configuración de Subtítulos</h2>
+                <button class="modal-close" onclick="closeSubtitleConfig()">✕</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="subtitleFontSize">Tamaño de Fuente:</label>
+                    <input type="range" id="subtitleFontSize" min="20" max="60" value="36" class="input-range">
+                    <span id="fontSizeValue">36px</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="subtitleFontColor">Color de Fuente:</label>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="color" id="subtitleFontColor" value="#ffffff" style="height: 40px; width: 60px;">
+                        <span id="fontColorValue">#ffffff</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="subtitleOutlineColor">Color de Borde:</label>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="color" id="subtitleOutlineColor" value="#000000" style="height: 40px; width: 60px;">
+                        <span id="outlineColorValue">#000000</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="subtitleOutlineWidth">Grosor del Borde:</label>
+                    <input type="range" id="subtitleOutlineWidth" min="0" max="5" value="2" class="input-range">
+                    <span id="outlineWidthValue">2px</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="subtitleAnimation">Estilo de Animación:</label>
+                    <select id="subtitleAnimation" class="input-field">
+                        <option value="karaoke">🎤 Karaoke (Relleno progresivo)</option>
+                        <option value="bounce">🎪 Rebote</option>
+                        <option value="wave">🌊 Onda</option>
+                        <option value="fade">✨ Fade In/Out</option>
+                        <option value="scale">📏 Escala</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="subtitlePosition">Posición Vertical:</label>
+                    <select id="subtitlePosition" class="input-field">
+                        <option value="bottom">⬇️ Abajo</option>
+                        <option value="center">⬌ Centro</option>
+                        <option value="top">⬆️ Arriba</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="enableSyncAdjustment" checked>
+                        Ajustar sincronización automática
+                    </label>
+                    <p class="help-text">Mejora la sincronización entre subtítulos y música</p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeSubtitleConfig()">Cancelar</button>
+                <button class="btn btn-primary" onclick="applySubtitleConfigAndGenerate()">Generar Loop</button>
+            </div>
+        </div>
+    </div>
+
     <script src="/static/app_secure.js"></script>
 </body>
 </html>

@@ -691,16 +691,70 @@ function generateVideoForSession(sessionId) {
     }
 }
 
-// Loop video for session
+// Loop video for session - Open configuration modal first
+let currentLoopSessionId = null;
+
 function loopVideoForSession(sessionId) {
+    currentLoopSessionId = sessionId;
+    openSubtitleConfig();
+}
+
+function openSubtitleConfig() {
+    const modal = document.getElementById('subtitleConfigModal');
+    modal.style.display = 'block';
+
+    // Update value displays when sliders change
+    document.getElementById('subtitleFontSize').oninput = function() {
+        document.getElementById('fontSizeValue').textContent = this.value + 'px';
+    };
+
+    document.getElementById('subtitleOutlineWidth').oninput = function() {
+        document.getElementById('outlineWidthValue').textContent = this.value + 'px';
+    };
+
+    document.getElementById('subtitleFontColor').oninput = function() {
+        document.getElementById('fontColorValue').textContent = this.value;
+    };
+
+    document.getElementById('subtitleOutlineColor').oninput = function() {
+        document.getElementById('outlineColorValue').textContent = this.value;
+    };
+}
+
+function closeSubtitleConfig() {
+    const modal = document.getElementById('subtitleConfigModal');
+    modal.style.display = 'none';
+    currentLoopSessionId = null;
+}
+
+function applySubtitleConfigAndGenerate() {
+    if (!currentLoopSessionId) {
+        showToast('Error: No se ha seleccionado una sesión', 'error');
+        return;
+    }
+
+    // Get configuration values
+    const config = {
+        fontSize: parseInt(document.getElementById('subtitleFontSize').value),
+        fontColor: document.getElementById('subtitleFontColor').value,
+        outlineColor: document.getElementById('subtitleOutlineColor').value,
+        outlineWidth: parseInt(document.getElementById('subtitleOutlineWidth').value),
+        animation: document.getElementById('subtitleAnimation').value,
+        position: document.getElementById('subtitlePosition').value,
+        enableSyncAdjustment: document.getElementById('enableSyncAdjustment').checked
+    };
+
+    // Send command with configuration
     if (ws && ws.readyState === WebSocket.OPEN) {
         ws.send(JSON.stringify({
             command: 'loop_video',
-            session_id: sessionId
+            session_id: currentLoopSessionId,
+            subtitle_config: config
         }));
 
-        showProgress('🔄 Iniciando creación de loop con subtítulos...');
-        showToast('🔄 Recreando bucle de video...', 'success');
+        showProgress('🔄 Iniciando creación de loop con subtítulos personalizados...');
+        showToast('🔄 Recreando bucle de video con tu configuración...', 'success');
+        closeSubtitleConfig();
     } else {
         showToast('Error: No hay conexión con el servidor', 'error');
     }
