@@ -20,7 +20,7 @@ replicate>=0.15.0
 # Media processing
 Pillow>=10.0.0
 numpy>=1.24.0
-moviepy>=1.0.3
+moviepy==1.0.3
 imageio>=2.31.0
 imageio-ffmpeg>=0.4.9
 
